@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 /**
  * Created by 1cochan on 2014/08/30.
  */
@@ -29,11 +31,11 @@ public class SensorModel {
         return str;
     }
 
-    public static double getValue(SensorEvent event) {
+    public static double getSumValues(SensorEvent event){
         float x = event.values[SensorManager.DATA_X];
         float y = event.values[SensorManager.DATA_Y];
         float z = event.values[SensorManager.DATA_Z];
-        double ret = Math.sqrt(x * x + y * y + z * z) - 9.8;
+        double ret = Math.sqrt(x * x + y * y + z * z) - 9.5;
         return ret;
     }
 
