@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
@@ -27,13 +26,10 @@ public class MyActivity extends Activity {
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                String str = "加速度センサー値:"
-                        + "\nX軸:" + event.values[SensorManager.DATA_X]
-                        + "\nY軸:" + event.values[SensorManager.DATA_Y]
-                        + "\nZ軸:" + event.values[SensorManager.DATA_Z];
+                changeColor((int) (event.values[SensorManager.DATA_X] + event.values[SensorManager.DATA_Y] + event.values[SensorManager.DATA_Z]));
+                String str = SensorModel.getString(event);
                 mTextView.setText(str);
             }
-
         }
 
         @Override
@@ -41,6 +37,7 @@ public class MyActivity extends Activity {
 
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +54,9 @@ public class MyActivity extends Activity {
         });
 
         _sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-
-
-        printSensors(this);
+        SensorModel.printSensors(this);
     }
 
-    private static void printSensors(Context context) {
-        SensorManager mSensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
-
-        List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-        for (Sensor sensor : deviceSensors) {
-            Log.d("タグ", sensor.getName() + ", " + sensor.getStringType() + ", " + sensor.getVendor());
-        }
-    }
 
     private void startFlashDisplay() {
         //TODO:色きりかえ
