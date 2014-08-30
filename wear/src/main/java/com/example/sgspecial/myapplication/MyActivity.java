@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Random;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.hardware.SensorManager;
@@ -22,18 +24,19 @@ public class MyActivity extends Activity {
 
     private TextView mTextView;
     private Random mRandom = new Random(); // ランダム
-    private boolean _isFlashingDisplay;
     private SensorManager _sensorManager;
+    private Thread _looper;
+
     private SensorEventListener _sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 //                changeColor((int) (event.values[SensorManager.DATA_X] + event.values[SensorManager.DATA_Y] + event.values[SensorManager.DATA_Z]));
 
-                if(mTextView == null){
+                if (mTextView == null) {
                     return;
                 }
-                MyActivity.this.startFlashDisplay(event);
+                MyActivity.this.startFlashDisplay();
                 String str = SensorModel.getString(event);
                 mTextView.setText(str);
             }
@@ -45,11 +48,11 @@ public class MyActivity extends Activity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+        _looper = new Thread();
         _sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
@@ -63,34 +66,21 @@ public class MyActivity extends Activity {
 //        SensorModel.printSensors(this);
     }
 
-    /**
-     * 点滅開始メソッド
-     * @param event
-     */
-    private void startFlashDisplay(SensorEvent event) {//TODO:色きりかえ
-        int sum = SensorModel.getSumValues(event);
+    //TODO_DONE:色きりかえ
+    //TODO:ループ
+    private void startFlashDisplay() {
 
-        int colors[] = {Color.blue, Color.red, Color.green, Color.WHITE, Color.YELLO};
 
-//        ArrayList<> colors = new ArrayList();
-//        colors.add(Color.BLUE);
 
-        Log.i(Const.Log_TAG, "加速度" + sum);
-        changeColor(Color.BLUE);
-    }
-
-    /**
-     * 点滅終了メソッド
-     */
-    private void stopFlashDisplay() {
-        _isFlashingDisplay = false;
+        int colors[] = {Color.BLUE, Color.RED, Color.GREEN, Color.WHITE, Color.YELLOW, Color.BLACK, Color.CYAN, Color.DKGRAY, Color.MAGENTA, Color.BLUE, Color.RED};
+        int color = colors[Util.get0to9()];
+        changeColor(color);
     }
 
     private void changeColor(int color) {
         LinearLayout ll = (LinearLayout) findViewById(R.id.LLayout);
         ll.setBackgroundColor(color);
     }
-
 
     @Override
     protected void onResume() {
