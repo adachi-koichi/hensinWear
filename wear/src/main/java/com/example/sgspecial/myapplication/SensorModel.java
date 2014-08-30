@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 /**
  * Created by 1cochan on 2014/08/30.
  */
@@ -27,6 +29,18 @@ public class SensorModel {
                 + "\nY軸:" + event.values[SensorManager.DATA_Y]
                 + "\nZ軸:" + event.values[SensorManager.DATA_Z];
         return str;
+    }
+
+    public static int getSumValues(SensorEvent event){
+        int ret = 0;
+        for (float value : event.values){
+            ret = (int) (ret + abs(value));
+        }
+//        int ret = (int) (event.values[SensorManager.DATA_X]
+//                        + event.values[SensorManager.DATA_Y]
+//                        + event.values[SensorManager.DATA_Z]);
+
+        return ret;
     }
 
 

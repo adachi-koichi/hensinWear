@@ -14,6 +14,8 @@ import android.hardware.SensorManager;
 import android.hardware.Sensor;    // 1.5
 import android.hardware.SensorEvent;    // 1.5
 import android.hardware.SensorEventListener;    // 1.5
+
+import com.google.android.gms.internal.e;
 //import android.hardware.SensorListener; // 1.1
 
 public class MyActivity extends Activity {
@@ -26,7 +28,12 @@ public class MyActivity extends Activity {
         @Override
         public void onSensorChanged(SensorEvent event) {
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-                changeColor((int) (event.values[SensorManager.DATA_X] + event.values[SensorManager.DATA_Y] + event.values[SensorManager.DATA_Z]));
+//                changeColor((int) (event.values[SensorManager.DATA_X] + event.values[SensorManager.DATA_Y] + event.values[SensorManager.DATA_Z]));
+
+                if(mTextView == null){
+                    return;
+                }
+                MyActivity.this.startFlashDisplay(event);
                 String str = SensorModel.getString(event);
                 mTextView.setText(str);
             }
@@ -43,29 +50,38 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+        _sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
                 mTextView = (TextView) stub.findViewById(R.id.text);
                 mTextView.setText("テスト!");
-                startFlashDisplay();
             }
         });
 
-        _sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        SensorModel.printSensors(this);
+//        SensorModel.printSensors(this);
     }
 
+    /**
+     * 点滅開始メソッド
+     * @param event
+     */
+    private void startFlashDisplay(SensorEvent event) {//TODO:色きりかえ
+        int sum = SensorModel.getSumValues(event);
 
-    private void startFlashDisplay() {
-        //TODO:色きりかえ
-//        int colors[] = [Color.blue, Color.red, Color.green, Color.WHITE, Color.YELLOW];
+        int colors[] = {Color.blue, Color.red, Color.green, Color.WHITE, Color.YELLO};
+
 //        ArrayList<> colors = new ArrayList();
 //        colors.add(Color.BLUE);
+
+        Log.i(Const.Log_TAG, "加速度" + sum);
         changeColor(Color.BLUE);
     }
 
+    /**
+     * 点滅終了メソッド
+     */
     private void stopFlashDisplay() {
         _isFlashingDisplay = false;
     }
