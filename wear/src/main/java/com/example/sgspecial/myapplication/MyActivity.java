@@ -26,6 +26,9 @@ public class MyActivity extends Activity {
     private TextView mTextView;
     private Random mRandom = new Random(); // ランダム
     private SensorManager _sensorManager;
+    private double accum_value = 0;
+    private final static int THRESH1 = 5000;
+    private Thread _looper;
 
     private SensorEventListener _sensorEventListener = new SensorEventListener() {
         @Override
@@ -36,9 +39,14 @@ public class MyActivity extends Activity {
                 if (mTextView == null) {
                     return;
                 }
-                MyActivity.this.startFlashDisplay();
                 String str = SensorModel.getString(event);
                 mTextView.setText(str);
+                accum_value += SensorModel.getSumValues(event);
+                Log.i(Const.Log_TAG, ""+accum_value);
+                if(THRESH1 < accum_value) {
+                    startFlashDisplay();
+                    Log.i(Const.Log_TAG,"call start Flash");
+                }
             }
         }
 

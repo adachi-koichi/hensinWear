@@ -31,17 +31,12 @@ public class SensorModel {
         return str;
     }
 
-    public static int getSumValues(SensorEvent event){
-        int ret = 0;
-        for (float value : event.values){
-            ret = (int) (ret + abs(value));
-        }
-//        int ret = (int) (event.values[SensorManager.DATA_X]
-//                        + event.values[SensorManager.DATA_Y]
-//                        + event.values[SensorManager.DATA_Z]);
-
+    public static double getSumValues(SensorEvent event){
+        float x = event.values[SensorManager.DATA_X];
+        float y = event.values[SensorManager.DATA_Y];
+        float z = event.values[SensorManager.DATA_Z];
+        double ret = Math.sqrt(x * x + y * y + z * z) - 9.5;
         return ret;
     }
-
 
 }
