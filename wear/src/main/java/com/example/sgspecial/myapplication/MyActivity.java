@@ -3,6 +3,7 @@ package com.example.sgspecial.myapplication;
 import java.util.List;
 import java.util.Random;
 
+import android.os.Handler;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -43,7 +44,7 @@ public class MyActivity extends Activity {
                 accum_value += SensorModel.getSumValues(event);
                 Log.i(Const.Log_TAG, ""+accum_value);
                 if(THRESH1 < accum_value) {
-                    startFlashDisplay(event);
+                    startFlashDisplay();
                     Log.i(Const.Log_TAG,"call start Flash");
                 }
             }
@@ -59,7 +60,6 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        _looper = new Thread();
         _sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
@@ -73,15 +73,8 @@ public class MyActivity extends Activity {
 //        SensorModel.printSensors(this);
     }
 
-    /**
-     * 点滅開始メソッド
-     * @param event
-     */
-    private void startFlashDisplay(SensorEvent event) {
-        //TODO:色きりかえ
-        double sum = SensorModel.getSumValues(event);
-
-        //int colors[] = {Color.blue, Color.red, Color.green, Color.WHITE, Color.YELLO};
+    //TODO_DONE:色きりかえ
+    private void startFlashDisplay() {
         int colors[] = {Color.BLUE, Color.RED, Color.GREEN, Color.WHITE, Color.YELLOW, Color.BLACK, Color.CYAN, Color.DKGRAY, Color.MAGENTA, Color.BLUE, Color.RED};
         int color = colors[Util.get0to9()];
         changeColor(color);
