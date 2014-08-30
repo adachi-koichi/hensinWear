@@ -29,5 +29,12 @@ public class SensorModel {
         return str;
     }
 
+    public static double getValue(SensorEvent event) {
+        float x = event.values[SensorManager.DATA_X];
+        float y = event.values[SensorManager.DATA_Y];
+        float z = event.values[SensorManager.DATA_Z];
+        double ret = Math.sqrt(x * x + y * y + z * z) - 9.8;
+        return ret;
+    }
 
 }

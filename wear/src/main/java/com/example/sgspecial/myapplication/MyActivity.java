@@ -22,6 +22,9 @@ public class MyActivity extends Activity {
     private Random mRandom = new Random(); // ランダム
     private boolean _isFlashingDisplay;
     private SensorManager _sensorManager;
+    private double accum_value = 0;
+    private final static int THRESH1 = 10000;
+
     private SensorEventListener _sensorEventListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -29,6 +32,11 @@ public class MyActivity extends Activity {
                 changeColor((int) (event.values[SensorManager.DATA_X] + event.values[SensorManager.DATA_Y] + event.values[SensorManager.DATA_Z]));
                 String str = SensorModel.getString(event);
                 mTextView.setText(str);
+                accum_value += SensorModel.getValue(event);
+                if(THRESH1 < accum_value) {
+                    startFlashDisplay();
+                    Log.i("mizu log","call start Flash");
+                }
             }
         }
 
@@ -60,10 +68,10 @@ public class MyActivity extends Activity {
 
     private void startFlashDisplay() {
         //TODO:色きりかえ
-//        int colors[] = [Color.blue, Color.red, Color.green, Color.WHITE, Color.YELLOW];
-//        ArrayList<> colors = new ArrayList();
-//        colors.add(Color.BLUE);
-        changeColor(Color.BLUE);
+        //int colors[] = [Color.blue, Color.red, Color.green, Color.WHITE, Color.YELLOW];
+        //ArrayList<> colors = new ArrayList();
+        //colors.add(Color.BLUE);
+        //changeColor(Color.BLUE);
     }
 
     private void stopFlashDisplay() {
