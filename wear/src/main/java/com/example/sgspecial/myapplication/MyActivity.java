@@ -3,6 +3,7 @@ package com.example.sgspecial.myapplication;
 import java.util.List;
 import java.util.Random;
 
+import android.os.Handler;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -25,7 +26,6 @@ public class MyActivity extends Activity {
     private TextView mTextView;
     private Random mRandom = new Random(); // ランダム
     private SensorManager _sensorManager;
-    private Thread _looper;
 
     private SensorEventListener _sensorEventListener = new SensorEventListener() {
         @Override
@@ -52,7 +52,6 @@ public class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        _looper = new Thread();
         _sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
@@ -67,11 +66,7 @@ public class MyActivity extends Activity {
     }
 
     //TODO_DONE:色きりかえ
-    //TODO:ループ
     private void startFlashDisplay() {
-
-
-
         int colors[] = {Color.BLUE, Color.RED, Color.GREEN, Color.WHITE, Color.YELLOW, Color.BLACK, Color.CYAN, Color.DKGRAY, Color.MAGENTA, Color.BLUE, Color.RED};
         int color = colors[Util.get0to9()];
         changeColor(color);
